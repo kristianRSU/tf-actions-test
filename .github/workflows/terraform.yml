@@ -1,0 +1,35 @@
+name: Terraform 
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get Module versions
+      run:
+       echo "TF_VERSION=${awk '/required_version/{print $NF}' main.tf}" | tr -d \" >> $GITHUB_ENV
+
+    - name: Echo variable
+      run: echo ${{ TF_VERSION }}
+
+      
+
+
+    # - name: Setup Terraform
+    #   uses: hashicorp/setup-terraform@v1
+    #   with:
+    #     terraform_version: 
