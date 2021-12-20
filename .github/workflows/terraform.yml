@@ -19,13 +19,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Get Module versions
+    - name: Get Module version
       id: tf_version
       run: |
        echo "::set-output name=TF_VERSION::$(awk '/required_version/{print $NF}' ./main.tf | tr -d \")"
-    - name: Echo variable
-      run: |
-        echo "Terraform version is ${{ steps.tf_version.outputs.TF_VERSION }}"
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ steps.tf_version.outputs.TF_VERSION }}"
 
       
 
