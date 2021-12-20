@@ -22,7 +22,7 @@ jobs:
     - name: Get Module versions
       id: tf_version
       run: |
-       echo "::set-output name=TF_VERSION::${awk '/required_version/{print $NF}' ./main.tf | tr -d \}"
+       echo "::set-output name=TF_VERSION::${awk '/required_version/{print $NF}' ./main.tf | tr -d}"
     - name: Echo variable
       run: |
         echo "Terraform version is ${{ steps.tf_version.outputs.TF_VERSION }}"
