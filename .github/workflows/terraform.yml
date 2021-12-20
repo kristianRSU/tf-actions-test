@@ -20,12 +20,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Get Module versions
+      id: tf_version
       run: |
-       echo "TF_VERSION=${awk '/required_version/{print $NF}' main.tf}" | tr -d \" >> $GITHUB_ENV
-
+       echo "::set-output name=TF_VERSION::${awk '/required_version/{print $NF}' main.tf | tr -d \}"
     - name: Echo variable
       run: |
-        echo ${{ TF_VERSION }}
+        echo "Terraform version is ${{ steps.tf_version.outputs.TF_VERSION }}"
 
       
 
