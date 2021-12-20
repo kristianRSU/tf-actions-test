@@ -27,11 +27,6 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ steps.tf_version.outputs.TF_VERSION }}
-
-      
-
-
-    # - name: Setup Terraform
-    #   uses: hashicorp/setup-terraform@v1
-    #   with:
-    #     terraform_version: 
+    - name: Check correct installed version
+      run: |
+        terraform -v
