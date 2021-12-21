@@ -3,8 +3,6 @@ name: Terraform
 on:
   push:
     branches: [ "*" ]
-  pull_request:
-    branches: [ "*" ]
 
 jobs:
   build:
@@ -22,11 +20,23 @@ jobs:
     - name: Get Module version
       id: tf_version
       run: |
-       echo "::set-output name=TF_VERSION::$(awk '/required_version/{print $NF}' ./main.tf | tr -d \")"
+        echo "::set-output name=TF_VERSION::$(awk '/required_version/{print $NF}' ./main.tf | tr -d \")"
+    
     - name: Install Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ steps.tf_version.outputs.TF_VERSION }}
-    - name: Check correct installed version
+    
+    - name: Terraform Plan
+      id: tf_plan
       run: |
-        terraform -v
+        echo "::set-output name=TF_PLAN::$(terraform plan -out tfplan)"
+  
+    - name: Upload Terraform Plan to Artifact store
+      id: tf_plan_upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: terraform_plan
+        path: |
+          ${{ steps.tf_plan.outputs.TF_PLAN }}
+        
